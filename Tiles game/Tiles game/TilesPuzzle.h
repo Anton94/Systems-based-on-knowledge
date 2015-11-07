@@ -105,17 +105,21 @@ public:
 	{
 		auto begin = high_resolution_clock::now();
 
+		size_t steps = 0;
+
 		root = new Node(startBoard, NULL, allocatePosition(startBoard));
 		root->generateHash();
 		numberOfTiles = startBoard.size();
 		numberOfRows = sqrt(numberOfTiles);
 		generateGoalHash(startBoard.size());
+		out << "Starting board: \n";
+		printPath(root, out, steps);
+		out << "Result:\n";
+
 		Node * n = solve(out); // Auto solve
 
 		auto end = high_resolution_clock::now();
 		auto ticks = duration_cast<microseconds>(end - begin);
-		
-		size_t steps = 0;
 		printPath(n, out, steps);
 
 		std::cout << "It took me ";
@@ -197,11 +201,12 @@ private:
 		// RIGHT
 		if (n->position % numberOfRows != numberOfRows - 1)
 			generateChild(n, n->position + 1);		
+
 	}
 
 	void generateChild(Node * n, size_t position)
 	{
-		if (position >= 0 && position  < numberOfTiles)
+		//if (position >= 0 && position  < numberOfTiles)
 		{
 			Node * child = new Node(n->board, n, position);
 			std::swap(child->board[child->position], child->board[n->position]);
