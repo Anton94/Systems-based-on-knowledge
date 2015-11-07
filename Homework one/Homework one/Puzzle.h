@@ -135,6 +135,7 @@ public:
 			throw "Invalid monster or food cells!";
 
 		priority_queue<Cell*, vector<Cell*>, Puzzle::CellComparison> front;
+		monster->visited = true;
 		front.push(monster);
 
 		Cell * current = NULL;
@@ -156,6 +157,19 @@ public:
 		resetVisitedValuesOfTheCells();
 	}
 
+	// Basic print makes the path cells '*'.
+	void basicVisualizePath(ostream& out)
+	{
+		Cell * cell = food;
+		if (cell)
+			while (cell->parent)
+			{
+				cell->symbol = '*';
+				cell = cell->parent;
+			}
+
+		printMap(out);
+	}
 private:
 	// Reset all cell`s visited value to false.
 	void resetVisitedValuesOfTheCells()

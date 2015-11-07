@@ -33,6 +33,7 @@ int main()
 			throw "Something is wrong with the map file!";
 		puzzle.printMap(std::cout);
 		puzzle.solve(std::cout);
+		puzzle.basicVisualizePath(std::cout);
 	}
 	catch (const char * msg)
 	{
