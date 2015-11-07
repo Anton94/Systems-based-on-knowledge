@@ -15,10 +15,11 @@ class Puzzle
 	{
 		int x, y;
 		char symbol;
-		double price; // Evristikata
+		double priceWalkedBlocks; // Heuristics
+		double pricePotentialToFood; // Heuristics
 		Cell* parent;
-		Cell(int i = 0, int j = 0, char s = ' ', double p = 0, Cell * f = NULL) : x(i), y(j), symbol(s), price(p), parent(f) {}
-		bool operator>(const Puzzle::Cell& rhs) const { return price > rhs.price; }
+		Cell(int i = 0, int j = 0, char s = ' ', double wb = 0, double te = 0, Cell * f = NULL) : x(i), y(j), symbol(s), priceWalkedBlocks(wb), pricePotentialToFood(te), parent(f) {}
+		bool operator>(const Puzzle::Cell& rhs) const { return priceWalkedBlocks + pricePotentialToFood > rhs.priceWalkedBlocks + pricePotentialToFood; }
 	};
 
 	class CellComparison // This class is so I can sort my Cells in the priority queue and the smallest price to be on the top of the queue.
@@ -91,7 +92,7 @@ public:
 					in.get(ch);
 					if (!in)
 						return false;
-				} while (ch == ',' || ch == '\n'); // I can Add more stuff, like to miss other fucked up symbols or something...
+				} while (ch == ',' || ch == '\n'); 
 				if (ch == EOF || !in)
 					return false; // Something went wrong..
 
@@ -135,6 +136,28 @@ public:
 		front.push(monster);
 
 	}
+
+private:
+	// Calculates AND SETS the distacne to the Food.
+	// Goest as much as possible blockes diagonally and others direct.
+	void calculateCellDistanceToFood(Puzzle::Cell* cell)
+	{
+		// Let`s distance be the distance between cell.x and food.x (cell.y and food.y)
+		// The smaller distance goes diagonally and the bigger distance (minus smaller one) goes direct.
+		int xDistance = abs(cell->x - food->x);
+		int yDistance = abs(cell->y - food->y);
+
+		// The potential price is the diagonal distance + direct distance
+		// cell->pricePotentialToFood = smallar_distance * diagonal_cost + (bigger_distance - smallar_distance) * direct_cost
+		if (xDistance > yDistance)
+			cell->pricePotentialToFood = yDistance * diagonalCost;
+		else
+			cell->pricePotentialToFood = xDistance * diagonalCost;
+
+		cell->pricePotentialToFood += abs(xDistance - yDistance) * directCost;
+	}
+public:
+
 
 	/* 
 		Getters for the map symbols.
