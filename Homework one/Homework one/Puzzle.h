@@ -4,19 +4,10 @@
 #include <stdio.h>
 #include <vector>
 #include <queue>
+#include <string>
 #include "Utility.h"
 
 using namespace std;
-
-
-enum CellType
-{
-	WALL = '#',
-	FREE = ' ',
-	WATER = '~',
-	MONSTER = 'M',
-	FOOD = 'X'
-};
 
 class Puzzle
 {
@@ -27,19 +18,33 @@ class Puzzle
 		int price; // Evristikata
 		Cell* parent;
 		Cell(int i = 0, int j = 0, char s = ' ', int p = 0, Cell * f = NULL) : x(i), y(j), symbol(s), price(p), parent(f) {}
+		bool operator>(const Puzzle::Cell& rhs) const { return price > rhs.price; }
 	};
 
+	class CellComparison // This class is so I can sort my Cells in the priority queue and the smallest price to be on the top of the queue.
+	{
+	public:
+		bool operator() (const Puzzle::Cell* lhs, const Puzzle::Cell* rhs) const
+		{
+			return *lhs > *rhs;
+		}
+	};
 private:
 	vector<vector<Cell>> map;
 	int mapWidth;
 	int mapHeight;
 	Cell * monster;
 	Cell * food;
+	char WALL;
+	char FREE;
+	char WATER;
+	char MONSTER;
+	char FOOD;
+private:
 public:
 	Puzzle()
 	{
-		mapWidth = mapHeight = 0;
-		monster = food = NULL;
+		setDefaultValues();
 	}
 
 	// Sets the monster and the food cells. If the values are invalid- throws exeption.
@@ -93,8 +98,14 @@ public:
 
 				if (ch == MONSTER)
 					monster = &map[i][j];
-				if (ch == FOOD)
+				else if (ch == FOOD)
 					food = &map[i][j];
+				else if (ch != WALL && ch != FREE && ch != WATER && ch != '\n' && ch != EOF)
+				{
+					throw string("In the given map there is some invalid symbol '") + ch + string("' at position (") + to_string(i) + string(",") + to_string(j) + string(")!");
+				}
+					
+				
 			}
 		}
 
@@ -121,9 +132,33 @@ public:
 		if (!monster || !food)
 			throw "Invalid monster or food cells!";
 
-		priority_queue<Cell*> front;
+		priority_queue<Cell*, vector<Cell*>, Puzzle::CellComparison> front;
 		front.push(monster);
 
+	}
+	char getWallSymbol() const { return WALL; }
+	char getFreeSymbol() const { return FREE; }
+	char getWaterSymbol() const { return WATER; }
+	char getMonsterSymbol() const { return MONSTER; }
+	char getFoodSymbol() const { return FOOD; }
+
+	// NOTE: if you change the symbols after the loaded map it can couse invalid calculations!
+	void setWallSymbol(char c) { WALL = c; }
+	void setFreeSymbol(char c) { FREE = c; }
+	void setWaterSymbol(char c) { WATER = c; }
+	void setMonsterSymbol(char c) { MONSTER = c; }
+	void setFoodSymbol(char c) { FOOD = c; }
+private:
+
+	void setDefaultValues()
+	{
+		mapWidth = mapHeight = 0;
+		monster = food = NULL;
+		WALL = 'N';
+		FREE = ' ';
+		WATER = '~';
+		MONSTER = 'M';
+		FOOD = 'X';
 	}
 };
 
