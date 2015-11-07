@@ -13,12 +13,13 @@ class Puzzle
 {
 	struct Cell
 	{
-		int x, y;
-		char symbol;
-		double priceWalkedBlocks; // Heuristics
+		int x, y;    // Representation
+		char symbol; // Representation
+		double priceWalkedBlocks;    // Heuristics
 		double pricePotentialToFood; // Heuristics
-		Cell* parent;
-		Cell(int i = 0, int j = 0, char s = ' ', double wb = 0, double te = 0, Cell * f = NULL) : x(i), y(j), symbol(s), priceWalkedBlocks(wb), pricePotentialToFood(te), parent(f) {}
+		bool visited; // Search
+		Cell* parent; // Search
+		Cell(int i = 0, int j = 0, char s = ' ', double wb = 0, double te = 0, Cell * f = NULL, bool v = false) : x(i), y(j), symbol(s), priceWalkedBlocks(wb), pricePotentialToFood(te), parent(f), visited(v) {}
 		bool operator>(const Puzzle::Cell& rhs) const { return priceWalkedBlocks + pricePotentialToFood > rhs.priceWalkedBlocks + pricePotentialToFood; }
 	};
 
@@ -43,7 +44,7 @@ private:
 	char FOOD;
 	double diagonalCost;
 	double directCost;
-	double watterCost;
+	double waterCost;
 private:
 public:
 	Puzzle()
@@ -126,7 +127,8 @@ public:
 		}
 	}
 
-	// Solves the puzzle and prints the path to the given ostream
+	// Solves the puzzle and prints the path to the given ostream. 
+	// After this function, I can go from the FOOD cell by it`s parents to get the generated path.
 	void solve(std::ostream& out)
 	{
 		if (!monster || !food)
@@ -135,11 +137,76 @@ public:
 		priority_queue<Cell*, vector<Cell*>, Puzzle::CellComparison> front;
 		front.push(monster);
 
+		Cell * current = NULL;
+
+		while (!front.empty())
+		{
+			// Let`s get the 'best' node
+			current = front.top();
+			front.pop();
+
+			// If we found the food, breaks.
+			if (current == food)
+				break;
+
+			pushCellsChildren(current, front);
+		}
+
+		// Reset all cells to be unvisited.
+		resetVisitedValuesOfTheCells();
 	}
 
 private:
+	// Reset all cell`s visited value to false.
+	void resetVisitedValuesOfTheCells()
+	{
+		for (int i = 0; i < mapHeight; ++i)
+			for (int j = 0; j < mapWidth; ++j)
+				map[i][j].visited = false;
+	}
+	// Pushes the children of the given Cell to the given priority queue.
+	void pushCellsChildren(Puzzle::Cell * current, priority_queue<Puzzle::Cell*, vector<Puzzle::Cell*>, Puzzle::CellComparison> & front)
+	{		
+		Cell * child = NULL;
+		
+		// Lest check all neighbour cells. (NOTE: the case where @i and @j are zero, the current cell is visited, so nothing will happen.)
+		for (int i = -1; i <= 1; ++i)
+			for (int j = -1; j <= 1; ++j)
+			{
+				child = getCellAt(current->x + i, current->y + j);
+				if (child) // If there is child there(valid cell at this position)
+				{
+					child->parent = current;
+					child->visited = true;
+					calculateCellDistanceToFood(child); // this function also set`s the potential distance
+					child->priceWalkedBlocks = current->priceWalkedBlocks;
+					
+					// Let`s calculate the cost of the move to this child.
+					if (current->symbol == WATER) // cost to get out from water cell in any direction is fixed - @waterCost
+						child->priceWalkedBlocks += waterCost;
+					else if (child->x == current->x || child->y == current->y) // If it`s a direct move(left, right, up or down)
+						child->priceWalkedBlocks += directCost;
+					else // it`s diagonal move
+						child->priceWalkedBlocks += diagonalCost;
+
+					// Add the child to the priority queue.
+					front.push(child); 
+				}
+			}
+	}
+
+	// Returns a pointer to the cell with the given coords.
+	Puzzle::Cell * getCellAt(int x, int y) 
+	{
+		if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight || // check if the cell is outside of the map
+			map[x][y].symbol == WALL || map[x][y].visited) 		 // check if the cell is wall or the cell is already visited
+			return NULL;
+
+		return &map[x][y];
+	}
+
 	// Calculates AND SETS the distacne to the Food.
-	// Goest as much as possible blockes diagonally and others direct.
+	// Goest as much as possible blockes diagonally and other once direct.
 	void calculateCellDistanceToFood(Puzzle::Cell* cell)
 	{
 		// Let`s distance be the distance between cell.x and food.x (cell.y and food.y)
@@ -169,7 +236,7 @@ public:
 	char getFoodSymbol() const { return FOOD; }
 	double getDiagonalCost() const { return diagonalCost; }
 	double getDirectCost() const { return directCost; }
-	double getWatterCost() const { return watterCost; }
+	double getWaterCost() const { return waterCost; }
 
 	/*
 		Setters for the map symbols.
@@ -182,7 +249,7 @@ public:
 	void setFoodSymbol(char c) { FOOD = c; }
 	void setDiagonalCost(double cost) { diagonalCost = cost; }
 	void setDirectCost(double cost) { directCost = cost; }
-	void setWatterCost(double cost) { watterCost = cost; }
+	void setWaterCost(double cost) { waterCost = cost; }
 
 private:
 	void setDefaultValues()
@@ -196,7 +263,7 @@ private:
 		FOOD = 'X';
 		diagonalCost = 1.5;
 		directCost = 1.0;
-		watterCost = 2.0;
+		waterCost = 2.0;
 	}
 };
 #endif
