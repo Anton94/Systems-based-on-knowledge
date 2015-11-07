@@ -160,7 +160,7 @@ public:
 	// Basic print makes the path cells '*'.
 	void basicVisualizePath(ostream& out)
 	{
-		Cell * cell = food;
+		Cell * cell = food->parent;
 		if (cell)
 			while (cell->parent)
 			{
