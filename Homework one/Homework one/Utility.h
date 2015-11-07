@@ -23,13 +23,11 @@ void getMatrixBounds(int& width, int& height, std::ifstream& in)
 			++height;
 		in.get(ch);
 		if (!in || ch == EOF)
-		{
-
-			in.clear();
-			in.seekg(start);
-			return;
-		}
+			break;
 	}
+
+	in.clear();
+	in.seekg(start);
 }
 
 #endif
