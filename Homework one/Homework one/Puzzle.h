@@ -2,9 +2,9 @@
 #define PUZZLE_H
 
 #include <stdio.h>
-#include <vector>
-#include <queue>
-#include <string>
+#include <vector> // the map and priority queue
+#include <queue>  // priority queue
+#include <string> // for throw formating...
 #include "Utility.h"
 
 using namespace std;
@@ -15,9 +15,9 @@ class Puzzle
 	{
 		int x, y;
 		char symbol;
-		int price; // Evristikata
+		double price; // Evristikata
 		Cell* parent;
-		Cell(int i = 0, int j = 0, char s = ' ', int p = 0, Cell * f = NULL) : x(i), y(j), symbol(s), price(p), parent(f) {}
+		Cell(int i = 0, int j = 0, char s = ' ', double p = 0, Cell * f = NULL) : x(i), y(j), symbol(s), price(p), parent(f) {}
 		bool operator>(const Puzzle::Cell& rhs) const { return price > rhs.price; }
 	};
 
@@ -40,6 +40,9 @@ private:
 	char WATER;
 	char MONSTER;
 	char FOOD;
+	double diagonalCost;
+	double directCost;
+	double watterCost;
 private:
 public:
 	Puzzle()
@@ -101,11 +104,7 @@ public:
 				else if (ch == FOOD)
 					food = &map[i][j];
 				else if (ch != WALL && ch != FREE && ch != WATER && ch != '\n' && ch != EOF)
-				{
-					throw string("In the given map there is some invalid symbol '") + ch + string("' at position (") + to_string(i) + string(",") + to_string(j) + string(")!");
-				}
-					
-				
+					throw string("In the given map there is some invalid symbol '") + ch + string("' at position (") + to_string(i) + string(",") + to_string(j) + string(")!");				
 			}
 		}
 
@@ -136,20 +135,33 @@ public:
 		front.push(monster);
 
 	}
+
+	/* 
+		Getters for the map symbols.
+	*/
 	char getWallSymbol() const { return WALL; }
 	char getFreeSymbol() const { return FREE; }
 	char getWaterSymbol() const { return WATER; }
 	char getMonsterSymbol() const { return MONSTER; }
 	char getFoodSymbol() const { return FOOD; }
+	double getDiagonalCost() const { return diagonalCost; }
+	double getDirectCost() const { return directCost; }
+	double getWatterCost() const { return watterCost; }
 
-	// NOTE: if you change the symbols after the loaded map it can couse invalid calculations!
+	/*
+		Setters for the map symbols.
+		NOTE: If you change the symbols after the map is loaded, it can cause invalid calculations!
+	*/
 	void setWallSymbol(char c) { WALL = c; }
 	void setFreeSymbol(char c) { FREE = c; }
 	void setWaterSymbol(char c) { WATER = c; }
 	void setMonsterSymbol(char c) { MONSTER = c; }
 	void setFoodSymbol(char c) { FOOD = c; }
-private:
+	void setDiagonalCost(double cost) { diagonalCost = cost; }
+	void setDirectCost(double cost) { directCost = cost; }
+	void setWatterCost(double cost) { watterCost = cost; }
 
+private:
 	void setDefaultValues()
 	{
 		mapWidth = mapHeight = 0;
@@ -159,8 +171,9 @@ private:
 		WATER = '~';
 		MONSTER = 'M';
 		FOOD = 'X';
+		diagonalCost = 1.5;
+		directCost = 1.0;
+		watterCost = 2.0;
 	}
 };
-
-
 #endif
