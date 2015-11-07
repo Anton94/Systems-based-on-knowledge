@@ -97,8 +97,8 @@ public:
 				if (ch == EOF || !in)
 					return false; // Something went wrong..
 
-				map[i][j].x = i;
-				map[i][j].y = j;
+				map[i][j].x = j;
+				map[i][j].y = i;
 				map[i][j].symbol = ch;
 
 				if (ch == MONSTER)
@@ -199,10 +199,10 @@ private:
 	Puzzle::Cell * getCellAt(int x, int y) 
 	{
 		if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight || // check if the cell is outside of the map
-			map[x][y].symbol == WALL || map[x][y].visited) 		 // check if the cell is wall or the cell is already visited
+			map[y][x].symbol == WALL || map[y][x].visited) 		 // check if the cell is wall or the cell is already visited
 			return NULL;
 
-		return &map[x][y];
+		return &map[y][x];
 	}
 
 	// Calculates AND SETS the distacne to the Food.

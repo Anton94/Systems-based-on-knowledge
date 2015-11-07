@@ -32,6 +32,7 @@ int main()
 		if (!puzzle.loadMap("map1.csv"))
 			throw "Something is wrong with the map file!";
 		puzzle.printMap(std::cout);
+		puzzle.solve(std::cout);
 	}
 	catch (const char * msg)
 	{
