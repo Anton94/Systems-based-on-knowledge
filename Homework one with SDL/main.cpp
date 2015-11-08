@@ -34,11 +34,10 @@ int main(int argc, char** argv)
 		Puzzle puzzle;
 		if (!puzzle.loadMap("map3.csv"))
 			throw "Something is wrong with the map file!";
+
 		puzzle.printMap(std::cout);
-		//puzzle.solve(std::cout);
-		//puzzle.basicVisualizePath(std::cout);
-		puzzle.printFormatedPath(std::cout);
 		puzzle.solveAndVizualize(std::cout);
+		puzzle.visualizeThePath();
 	}
 	catch (const char * msg)
 	{

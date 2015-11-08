@@ -222,6 +222,7 @@ public:
 			throw "Invalid monster or food cells!";
 		// Reset all cell`s search data (visited and parent fields).
 		resetValuesOfTheCells();
+
 		// Initial colors for the cells
         fillInitialColors();
 		displayVFB(vfb);
@@ -235,7 +236,7 @@ public:
 		while (!front.empty())
 		{
 		    /*  Delay between every cell pop*/
-		    //Sleep(delay);
+		    Sleep(delay);
 
 			// Let`s get the 'best' node
 			current = front.top();
@@ -254,7 +255,32 @@ public:
 			pushCellsChildren(current, front, out);
 		}
 	}
+	/*
+        Visualize the closest path from the Monster to the cell
+	*/
+	void visualizeThePath()
+	{
+		visualizeThePath(food);
+	}
+
 private:
+	/*
+        Visualize the closest path from the Monster to the cell
+	*/
+	void visualizeThePath(Cell * cell)
+	{
+		if (!cell)
+			return;
+
+		visualizeThePath(cell->parent);
+
+		// Make the color of the cell like the monster one*
+        cell->color = monsterColor;
+        fillVFBCell(cell);
+        /* Delay between every cell visualize */
+        Sleep(delay << 2); // Multiply the basic delay by 4
+        displayVFB(vfb);
+	}
     // Goes through every cell and makes needed color to the virtual frame buffer
     void fillInitialColors()
     {
@@ -331,7 +357,7 @@ private:
 					// Add the child to the priority queue.
 					out << "Inserting child at (" << child->x << "," << child->y << ") with price: " << child->pricePotentialToFood + child->priceWalkedBlocks << "\n";
 					/* Make the color of the cell darker and display it*/
-                    child->color *= 0.7;
+                    child->color *= 0.8;
                     fillVFBCell(child);
                     displayVFB(vfb);
 					front.push(child);
@@ -407,11 +433,11 @@ private:
 		waterCost = 2.0;
 		wallColor = Color(0x000000);
 		freeColor = Color(0x00FF00);
-		waterColor = Color(0x0000FF);
+		waterColor = Color(0x00D0FF);
 		monsterColor = Color(0xCF5B1E);
 		foodColor = Color(0x9D5BA6);
         vfbCellWidth = vfbCellHeight = 0;
-        delay = 500;
+        delay = 100;
 	}
 };
 #endif
