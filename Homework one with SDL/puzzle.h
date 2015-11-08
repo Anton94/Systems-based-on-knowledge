@@ -235,17 +235,17 @@ public:
 		while (!front.empty())
 		{
 		    /*  Delay between every cell pop*/
-		    Sleep(delay);
+		    //Sleep(delay);
 
 			// Let`s get the 'best' node
 			current = front.top();
 			front.pop();
+			out << "Looking cell at (" << current->x << "," << current->y << ") with price: " << current->pricePotentialToFood + current->priceWalkedBlocks << "\n";
 
 			/* Make the color of the cell darker and display it*/
-            current->color *= 0.5;
+            current->color *= 0.7;
             fillVFBCell(current);
             displayVFB(vfb);
-
 
 			// If we found the food, breaks.
 			if (current == food)
@@ -330,6 +330,10 @@ private:
 
 					// Add the child to the priority queue.
 					out << "Inserting child at (" << child->x << "," << child->y << ") with price: " << child->pricePotentialToFood + child->priceWalkedBlocks << "\n";
+					/* Make the color of the cell darker and display it*/
+                    child->color *= 0.7;
+                    fillVFBCell(child);
+                    displayVFB(vfb);
 					front.push(child);
 				}
 			}
