@@ -43,7 +43,13 @@
 			<Add directory="E:/sdk/SDL-1.2.15/lib" />
 		</Linker>
 		<Unit filename="cb.bmp" />
+		<Unit filename="color.h" />
+		<Unit filename="constants.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="puzzle.h" />
+		<Unit filename="sdl.cpp" />
+		<Unit filename="sdl.h" />
+		<Unit filename="util.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

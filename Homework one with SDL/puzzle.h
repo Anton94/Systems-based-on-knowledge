@@ -32,7 +32,7 @@ class Puzzle
 		}
 	};
 private:
-	vector< vector<Puzzle::Cell> > map;
+	vector< vector<Cell> > map;
 	int mapWidth;
 	int mapHeight;
 	Cell * monster;
