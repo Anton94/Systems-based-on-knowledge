@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1447000117 source:c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\main.cpp
+1447007404 source:c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\main.cpp
 	<iostream>
 	<SDL/SDL.h>
 	"sdl.h"
@@ -215,10 +215,12 @@
 	<stdio.h>
 	"sdl.h"
 
-1446999463 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\puzzle.h
+1447007918 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\puzzle.h
 	<stdio.h>
 	<vector>
 	<queue>
 	<string>
 	"util.h"
+	"color.h"
+	"constants.h"
 

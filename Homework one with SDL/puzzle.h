@@ -6,6 +6,8 @@
 #include <queue>  // priority queue
 #include <string> // for throw formating...
 #include "util.h"
+#include "color.h"
+#include "constants.h"
 
 using namespace std;
 
@@ -18,8 +20,9 @@ class Puzzle
 		double priceWalkedBlocks;    // Heuristics
 		double pricePotentialToFood; // Heuristics
 		bool visited; // Search
+		Color color;
 		Cell* parent; // Search
-		Cell(int i = 0, int j = 0, char s = ' ', double wb = 0, double te = 0, Cell * f = NULL, bool v = false) : x(i), y(j), symbol(s), priceWalkedBlocks(wb), pricePotentialToFood(te), parent(f), visited(v) {}
+		Cell(int i = 0, int j = 0, char s = ' ', double wb = 0, double te = 0, Cell * f = NULL, bool v = false, Color c = Color()) : x(i), y(j), symbol(s), priceWalkedBlocks(wb), pricePotentialToFood(te), parent(f), visited(v), color(c) {}
 		bool operator>(const Puzzle::Cell& rhs) const { return priceWalkedBlocks + pricePotentialToFood > rhs.priceWalkedBlocks + pricePotentialToFood; }
 	};
 
@@ -45,6 +48,13 @@ private:
 	double diagonalCost;
 	double directCost;
 	double waterCost;
+	Color wallColor;
+	Color freeColor;
+	Color waterColor;
+	Color monsterColor;
+	Color foodColor;
+    int vfbCellWidth;
+    int vfbCellHeight;
 private:
 public:
 	Puzzle()
@@ -80,6 +90,8 @@ public:
 
 		char ch;
 		getMatrixBounds(mapWidth, mapHeight, in);
+        vfbCellWidth = RESX / (mapWidth + 1); // For now just a simple bounds
+        vfbCellHeight = RESY / (mapHeight + 1);
 
 		map.resize(mapHeight);
 		for (int i = 0; i < mapHeight; ++i)
@@ -101,11 +113,30 @@ public:
 				map[i][j].y = i;
 				map[i][j].symbol = ch;
 
+                // TO DO: ma
 				if (ch == MONSTER)
+                {
 					monster = &map[i][j];
+                    map[i][j].color = monsterColor;
+                }
 				else if (ch == FOOD)
+                {
 					food = &map[i][j];
-				else if (ch != WALL && ch != FREE && ch != WATER && ch != '\n' && ch != EOF)
+                    map[i][j].color = foodColor;
+                }
+				else if (ch == WALL)
+                {
+                    map[i][j].color = wallColor;
+                }
+				else if (ch == FREE)
+                {
+                    map[i][j].color = freeColor;
+                }
+				else if (ch == WATER)
+                {
+                    map[i][j].color = waterColor;
+                }
+                else if(ch != '\n' && ch != EOF)
 					throw string("In the given map there is some invalid symbol '") ;//+ ch + string("' at position (") + to_string(i) + string(",") + to_string(j) + string(")!");
 			}
 		}
@@ -134,6 +165,9 @@ public:
 		if (!monster || !food)
 			throw "Invalid monster or food cells!";
 
+		// Reset all cell`s search data (visited and parent fields).
+		resetValuesOfTheCells();
+
 		priority_queue<Cell*, vector<Cell*>, Puzzle::CellComparison> front;
 		monster->visited = true;
 		front.push(monster);
@@ -152,9 +186,6 @@ public:
 
 			pushCellsChildren(current, front);
 		}
-
-		// Reset all cells to be unvisited.
-		resetVisitedValuesOfTheCells();
 	}
 
 	// Basic print makes the path cells '*'.
@@ -179,7 +210,69 @@ public:
 		printFormatedPath(food, out);
 		out << "]\n";
 	}
+
+	/*
+        SDL visualization with path finding
+	*/
+	void solveAndVizualize()
+	{
+		if (!monster || !food)
+			throw "Invalid monster or food cells!";
+		// Reset all cell`s search data (visited and parent fields).
+		resetValuesOfTheCells();
+		// Initial colors for the cells
+        fillInitialColors();
+
+		displayVFB(vfb);
+
+		priority_queue<Cell*, vector<Cell*>, Puzzle::CellComparison> front;
+		monster->visited = true;
+		front.push(monster);
+
+		Cell * current = NULL;
+
+		while (!front.empty())
+		{
+			// Let`s get the 'best' node
+			current = front.top();
+			front.pop();
+
+			// If we found the food, breaks.
+			if (current == food)
+				break;
+
+			pushCellsChildren(current, front);
+		}
+	}
 private:
+    // Goes through every cell and makes needed color to the virtual frame buffer
+    void fillInitialColors()
+    {
+        for (int i = 0; i < mapHeight; ++i)
+			for (int j = 0; j < mapWidth; ++j)
+            {
+				fillVFBCell(&map[i][j]);
+            }
+    }
+    // Fills the virtual frame buffer cell with the given Cells color
+    void fillVFBCell(Cell * cell)
+    {
+        if (!cell)
+            return;
+
+        int vfbYPositionStart = (cell->y) * vfbCellHeight;
+        int vfbYPositionEnd = vfbYPositionStart + vfbCellHeight;
+        int vfbXPositionStart = (cell->x) * vfbCellWidth;
+        int vfbXPositionEnd = vfbXPositionStart + vfbCellWidth;
+
+
+                cout << vfbXPositionStart << " = " << cell->x << "*" << vfbCellWidth << endl;
+        for (int y = vfbYPositionStart; y < vfbYPositionEnd; ++y)
+            for (int x = vfbXPositionStart; x < vfbXPositionEnd; ++x)
+            {
+                vfb[y][x] = cell->color;
+            }
+    }
 	// Prints the path from the monster to his food.
 	void printFormatedPath(Cell * cell, ostream& out) const
 	{
@@ -192,12 +285,15 @@ private:
 			out << ", ";
 	}
 
-	// Reset all cell`s visited value to false.
-	void resetVisitedValuesOfTheCells()
+	// Reset all cell`s visited and parents values.
+	void resetValuesOfTheCells()
 	{
 		for (int i = 0; i < mapHeight; ++i)
 			for (int j = 0; j < mapWidth; ++j)
+            {
 				map[i][j].visited = false;
+				map[i][j].parent = NULL;
+            }
 	}
 	// Pushes the children of the given Cell to the given priority queue.
 	void pushCellsChildren(Puzzle::Cell * current, priority_queue<Puzzle::Cell*, vector<Puzzle::Cell*>, Puzzle::CellComparison> & front)
@@ -259,8 +355,6 @@ private:
 		cell->pricePotentialToFood += abs(xDistance - yDistance) * directCost;
 	}
 public:
-
-
 	/*
 		Getters for the map symbols.
 	*/
@@ -285,7 +379,6 @@ public:
 	void setDiagonalCost(double cost) { diagonalCost = cost; }
 	void setDirectCost(double cost) { directCost = cost; }
 	void setWaterCost(double cost) { waterCost = cost; }
-
 private:
 	void setDefaultValues()
 	{
@@ -299,6 +392,12 @@ private:
 		diagonalCost = 1.5;
 		directCost = 1.0;
 		waterCost = 2.0;
+		wallColor = Color(0x000000);
+		freeColor = Color(0x00FF00);
+		waterColor = Color(0x0000FF);
+		monsterColor = Color(0xCF5B1E);
+		foodColor = Color(0x9D5BA6);
+        vfbCellWidth = vfbCellHeight = 0;
 	}
 };
 #endif
