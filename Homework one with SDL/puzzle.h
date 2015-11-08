@@ -341,26 +341,31 @@ private:
 				child = getCellAt(current->x + i, current->y + j);
 				if (child) // If there is child there(valid cell at this position)
 				{
-					child->parent = current;
-					child->visited = true;
-					calculateCellDistanceToFood(child); // this function also set`s the potential distance
-					child->priceWalkedBlocks = current->priceWalkedBlocks;
+				    double newPriceWalkedBlocks = current->priceWalkedBlocks;
+				    // Let`s calculate the cost of the move to this child.
+                    if (current->symbol == WATER) // cost to get out from water cell in any direction is fixed - @waterCost
+                        newPriceWalkedBlocks += waterCost;
+                    else if (child->x == current->x || child->y == current->y) // If it`s a direct move(left, right, up or down)
+                        newPriceWalkedBlocks += directCost;
+                    else // it`s diagonal move
+                        newPriceWalkedBlocks += diagonalCost;
 
-					// Let`s calculate the cost of the move to this child.
-					if (current->symbol == WATER) // cost to get out from water cell in any direction is fixed - @waterCost
-						child->priceWalkedBlocks += waterCost;
-					else if (child->x == current->x || child->y == current->y) // If it`s a direct move(left, right, up or down)
-						child->priceWalkedBlocks += directCost;
-					else // it`s diagonal move
-						child->priceWalkedBlocks += diagonalCost;
+                    // Let`s see if we need to add this child to the @front
+					if (!(i == 0 && j == 0) && (!child->visited || (child->visited && child->priceWalkedBlocks > newPriceWalkedBlocks)))
+                    {
+                        child->visited = true;
+                        calculateCellDistanceToFood(child);
+                        child->parent = current;
+                        child->priceWalkedBlocks = newPriceWalkedBlocks;
 
-					// Add the child to the priority queue.
-					out << "Inserting child at (" << child->x << "," << child->y << ") with price: " << child->pricePotentialToFood + child->priceWalkedBlocks << "\n";
-					/* Make the color of the cell darker and display it*/
-                    child->color *= 0.8;
-                    fillVFBCell(child);
-                    displayVFB(vfb);
-					front.push(child);
+                        // Add the child to the priority queue.
+                        out << "Inserting child at (" << child->x << "," << child->y << ") with price: " << child->pricePotentialToFood + child->priceWalkedBlocks << "\n";
+                        /* Make the color of the cell darker and display it*/
+                        child->color *= 0.8;
+                        fillVFBCell(child);
+                        displayVFB(vfb);
+                        front.push(child);
+                    }
 				}
 			}
 	}
@@ -369,7 +374,8 @@ private:
 	Puzzle::Cell * getCellAt(int x, int y)
 	{
 		if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight || // check if the cell is outside of the map
-			map[y][x].symbol == WALL || map[y][x].visited) 		 // check if the cell is wall or the cell is already visited
+			map[y][x].symbol == WALL)// check if the cell is wall or the cell is already visited
+			//|| map[y][x].visited)
 			return NULL;
 
 		return &map[y][x];
