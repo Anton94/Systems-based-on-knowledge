@@ -169,8 +169,29 @@ public:
 			}
 
 		printMap(out);
+		printFormatedPath(out);
+	}
+
+	// Prints the path from the monster to his food.
+	void printFormatedPath(ostream& out) const
+	{
+		out << "[";
+		printFormatedPath(food, out);
+		out << "]\n";
 	}
 private:
+	// Prints the path from the monster to his food.
+	void printFormatedPath(Cell * cell, ostream& out) const
+	{
+		if (!cell)
+			return;
+
+		printFormatedPath(cell->parent, out);
+		out << "(" << cell->x << "," << cell->y << ")";
+		if (cell != food)
+			out << ", ";
+	}
+
 	// Reset all cell`s visited value to false.
 	void resetVisitedValuesOfTheCells()
 	{
