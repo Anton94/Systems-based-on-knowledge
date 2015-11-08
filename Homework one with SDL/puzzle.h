@@ -1,7 +1,8 @@
 #ifndef PUZZLE_H
 #define PUZZLE_H
 
-#include <stdio.h>
+#include <iostream>
+#include <windows.h>
 #include <vector> // the map and priority queue
 #include <queue>  // priority queue
 #include <string> // for throw formating...
@@ -23,7 +24,7 @@ class Puzzle
 		Color color;
 		Cell* parent; // Search
 		Cell(int i = 0, int j = 0, char s = ' ', double wb = 0, double te = 0, Cell * f = NULL, bool v = false, Color c = Color()) : x(i), y(j), symbol(s), priceWalkedBlocks(wb), pricePotentialToFood(te), parent(f), visited(v), color(c) {}
-		bool operator>(const Puzzle::Cell& rhs) const { return priceWalkedBlocks + pricePotentialToFood > rhs.priceWalkedBlocks + pricePotentialToFood; }
+		bool operator>(const Puzzle::Cell& rhs) const { return priceWalkedBlocks + pricePotentialToFood > rhs.priceWalkedBlocks + rhs.pricePotentialToFood; }
 	};
 
 	class CellComparison // This class is so I can sort my Cells in the priority queue and the smallest price to be on the top of the queue.
@@ -55,6 +56,7 @@ private:
 	Color foodColor;
     int vfbCellWidth;
     int vfbCellHeight;
+    int delay; // Delay between child search
 private:
 public:
 	Puzzle()
@@ -184,7 +186,7 @@ public:
 			if (current == food)
 				break;
 
-			pushCellsChildren(current, front);
+			pushCellsChildren(current, front, out);
 		}
 	}
 
@@ -214,7 +216,7 @@ public:
 	/*
         SDL visualization with path finding
 	*/
-	void solveAndVizualize()
+	void solveAndVizualize(ostream& out)
 	{
 		if (!monster || !food)
 			throw "Invalid monster or food cells!";
@@ -222,7 +224,6 @@ public:
 		resetValuesOfTheCells();
 		// Initial colors for the cells
         fillInitialColors();
-
 		displayVFB(vfb);
 
 		priority_queue<Cell*, vector<Cell*>, Puzzle::CellComparison> front;
@@ -233,15 +234,24 @@ public:
 
 		while (!front.empty())
 		{
+		    /*  Delay between every cell pop*/
+		    Sleep(delay);
+
 			// Let`s get the 'best' node
 			current = front.top();
 			front.pop();
+
+			/* Make the color of the cell darker and display it*/
+            current->color *= 0.5;
+            fillVFBCell(current);
+            displayVFB(vfb);
+
 
 			// If we found the food, breaks.
 			if (current == food)
 				break;
 
-			pushCellsChildren(current, front);
+			pushCellsChildren(current, front, out);
 		}
 	}
 private:
@@ -265,8 +275,6 @@ private:
         int vfbXPositionStart = (cell->x) * vfbCellWidth;
         int vfbXPositionEnd = vfbXPositionStart + vfbCellWidth;
 
-
-                cout << vfbXPositionStart << " = " << cell->x << "*" << vfbCellWidth << endl;
         for (int y = vfbYPositionStart; y < vfbYPositionEnd; ++y)
             for (int x = vfbXPositionStart; x < vfbXPositionEnd; ++x)
             {
@@ -296,7 +304,7 @@ private:
             }
 	}
 	// Pushes the children of the given Cell to the given priority queue.
-	void pushCellsChildren(Puzzle::Cell * current, priority_queue<Puzzle::Cell*, vector<Puzzle::Cell*>, Puzzle::CellComparison> & front)
+	void pushCellsChildren(Puzzle::Cell * current, priority_queue<Puzzle::Cell*, vector<Puzzle::Cell*>, Puzzle::CellComparison> & front, ostream& out)
 	{
 		Cell * child = NULL;
 
@@ -321,6 +329,7 @@ private:
 						child->priceWalkedBlocks += diagonalCost;
 
 					// Add the child to the priority queue.
+					out << "Inserting child at (" << child->x << "," << child->y << ") with price: " << child->pricePotentialToFood + child->priceWalkedBlocks << "\n";
 					front.push(child);
 				}
 			}
@@ -398,6 +407,7 @@ private:
 		monsterColor = Color(0xCF5B1E);
 		foodColor = Color(0x9D5BA6);
         vfbCellWidth = vfbCellHeight = 0;
+        delay = 500;
 	}
 };
 #endif

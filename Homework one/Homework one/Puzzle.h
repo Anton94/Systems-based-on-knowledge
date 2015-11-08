@@ -20,7 +20,7 @@ class Puzzle
 		bool visited; // Search
 		Cell* parent; // Search
 		Cell(int i = 0, int j = 0, char s = ' ', double wb = 0, double te = 0, Cell * f = NULL, bool v = false) : x(i), y(j), symbol(s), priceWalkedBlocks(wb), pricePotentialToFood(te), parent(f), visited(v) {}
-		bool operator>(const Puzzle::Cell& rhs) const { return priceWalkedBlocks + pricePotentialToFood > rhs.priceWalkedBlocks + pricePotentialToFood; }
+		bool operator>(const Puzzle::Cell& rhs) const { return priceWalkedBlocks + pricePotentialToFood > rhs.priceWalkedBlocks + rhs.pricePotentialToFood; }
 	};
 
 	class CellComparison // This class is so I can sort my Cells in the priority queue and the smallest price to be on the top of the queue.

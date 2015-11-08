@@ -5,6 +5,7 @@
 Color vfb[VFB_MAX_SIZE][VFB_MAX_SIZE]; //!< virtual framebuffer
 
 #include "puzzle.h"
+
 void renderScene(void)
 {
 	for (int y = 0; y < frameHeight(); y++)
@@ -31,14 +32,13 @@ int main(int argc, char** argv)
     try
 	{
 		Puzzle puzzle;
-		if (!puzzle.loadMap("map2.csv"))
+		if (!puzzle.loadMap("map3.csv"))
 			throw "Something is wrong with the map file!";
 		puzzle.printMap(std::cout);
 		puzzle.solve(std::cout);
 		//puzzle.basicVisualizePath(std::cout);
 		puzzle.printFormatedPath(std::cout);
-		puzzle.solveAndVizualize();
-		displayVFB(vfb);
+		puzzle.solveAndVizualize(std::cout);
 	}
 	catch (const char * msg)
 	{
