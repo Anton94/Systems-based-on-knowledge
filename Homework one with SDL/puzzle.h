@@ -250,7 +250,10 @@ public:
 
 			// If we found the food, breaks.
 			if (current == food)
+            {
+                out << "Price to the food is: " << current->priceWalkedBlocks << "\n"; // Price to the food is zero...
 				break;
+            }
 
 			pushCellsChildren(current, front, out);
 		}
@@ -443,7 +446,7 @@ private:
 		monsterColor = Color(0xCF5B1E);
 		foodColor = Color(0x9D5BA6);
         vfbCellWidth = vfbCellHeight = 0;
-        delay = 100;
+        delay = 0;
 	}
 };
 #endif

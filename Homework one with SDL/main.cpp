@@ -32,7 +32,7 @@ int main(int argc, char** argv)
     try
 	{
 		Puzzle puzzle;
-		if (!puzzle.loadMap("map3.csv"))
+		if (!puzzle.loadMap("map5.csv"))
 			throw "Something is wrong with the map file!";
 
 		puzzle.printMap(std::cout);
