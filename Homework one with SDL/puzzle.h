@@ -246,7 +246,7 @@ public:
 			/* Make the color of the cell darker and display it*/
             current->color *= 0.7;
             fillVFBCell(current);
-            displayVFB(vfb);
+          //  displayVFB(vfb);
 
 			// If we found the food, breaks.
 			if (current == food)
@@ -366,7 +366,7 @@ private:
                         /* Make the color of the cell darker and display it*/
                         child->color *= 0.8;
                         fillVFBCell(child);
-                        displayVFB(vfb);
+                     //   displayVFB(vfb);
                         front.push(child);
                     }
 				}
