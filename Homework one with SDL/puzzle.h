@@ -281,7 +281,7 @@ private:
         cell->color = monsterColor;
         fillVFBCell(cell);
         /* Delay between every cell visualize */
-        Sleep(delay << 2); // Multiply the basic delay by 4
+        Sleep(delay << 1); // Multiply the basic delay by 4
         displayVFB(vfb);
 	}
     // Goes through every cell and makes needed color to the virtual frame buffer
