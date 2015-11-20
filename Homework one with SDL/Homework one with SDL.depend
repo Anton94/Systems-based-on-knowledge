@@ -225,7 +225,7 @@
 	"color.h"
 	"constants.h"
 
-1447757990 source:c:\users\anton\documents\visual studio 2013\projects\systems-based-on-knowledge\homework one with sdl\main.cpp
+1448005063 source:c:\users\anton\documents\visual studio 2013\projects\systems-based-on-knowledge\homework one with sdl\main.cpp
 	<iostream>
 	<SDL/SDL.h>
 	"sdl.h"
@@ -436,7 +436,7 @@
 
 1447757990 c:\users\anton\documents\visual studio 2013\projects\systems-based-on-knowledge\homework one with sdl\constants.h
 
-1447761940 c:\users\anton\documents\visual studio 2013\projects\systems-based-on-knowledge\homework one with sdl\puzzle.h
+1448005088 c:\users\anton\documents\visual studio 2013\projects\systems-based-on-knowledge\homework one with sdl\puzzle.h
 	<iostream>
 	<windows.h>
 	<vector>
