@@ -38,6 +38,7 @@ int main(int argc, char** argv)
 		puzzle.printMap(std::cout);
 		puzzle.solveAndVizualize(std::cout);
 		puzzle.visualizeThePath();
+
 	}
 	catch (const char * msg)
 	{
