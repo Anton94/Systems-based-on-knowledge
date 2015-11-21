@@ -9,7 +9,6 @@
 inline int nearestInt(float x) { return (int) floor(x + 0.5f); }
 
 
-
 // Sets the number of rows and colums of the matrix given in inputstream
 inline void getMatrixBounds(int& width, int& height, std::ifstream& in)
 {

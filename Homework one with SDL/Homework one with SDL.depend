@@ -1,9 +1,10 @@
 # depslib dependency file v1.0
-1448058856 source:c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\main.cpp
+1448120400 source:c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\main.cpp
 	<iostream>
 	<SDL/SDL.h>
 	"sdl.h"
 	"puzzle.h"
+	"util.h"
 
 1325738639 e:\sdk\sdl-1.2.15\include\sdl\sdl.h
 	"SDL_main.h"
@@ -195,14 +196,14 @@
 	"begin_code.h"
 	"close_code.h"
 
-1448059070 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\sdl.h
+1448059303 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\sdl.h
 	"color.h"
 	"constants.h"
 
 1446996429 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\color.h
 	"util.h"
 
-1448057222 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\util.h
+1448119839 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\util.h
 	<stdlib.h>
 	<math.h>
 	<fstream>
@@ -210,12 +211,12 @@
 
 1446996226 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\constants.h
 
-1446996119 source:c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\sdl.cpp
+1448059095 source:c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\sdl.cpp
 	<SDL/SDL.h>
 	<stdio.h>
 	"sdl.h"
 
-1448058619 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\puzzle.h
+1448120455 c:\users\anton\documents\visual studio 2013\projects\systems, based on knowledge\homework one with sdl\puzzle.h
 	<iostream>
 	<windows.h>
 	<vector>

@@ -143,9 +143,6 @@ private:
 	void calculateCellDistanceToFood(Puzzle::Cell* cell);
 };
 
-
-
-
 inline Puzzle::Puzzle()
 {
     setDefaultValues();
@@ -154,19 +151,21 @@ inline Puzzle::Puzzle()
 // Sets the monster and the food cells. If the values are invalid- throws exeption.
 inline void Puzzle::setMonsterAndFoodCoords(int monsterX, int monsterY, int foodX, int foodY)
 {
+    std::cout << monsterX << " " << monsterY << " " << foodX << " " << foodY << std::endl;
     if (monsterX >= mapWidth || monsterY >= mapHeight || monsterX < 0 || monsterY < 0)
         throw "Invalid monster coordinates for the given map!";
     if (foodX >= mapWidth || foodY >= mapHeight || foodX < 0 || foodY < 0)
         throw "Invalid food coordinates for the given map!";
 
-    monster = &map[monsterX][monsterY];
-    food = &map[foodX][foodY];
+    monster = &map[monsterY][monsterX];
+    monster->symbol = MONSTER;
+    monster->color = monsterColor;
 
-    if (monster->symbol != MONSTER)
-        throw "Invalid value in the monster cell, there`s not a monster there!";
 
-    if (food->symbol != FOOD)
-        throw "Invalid value in the food cell, there`s not any food there!";
+    food = &map[foodY][foodX];
+    food->symbol = FOOD;
+    food->color = foodColor;
+
 }
 
 // Loads the map from csv file. If the file is not valud returns false.
@@ -203,17 +202,7 @@ inline bool Puzzle::loadMap(const char * fileName)
             map[i][j].symbol = ch;
 
             // TO DO: ma
-            if (ch == MONSTER)
-            {
-                monster = &map[i][j];
-                map[i][j].color = monsterColor;
-            }
-            else if (ch == FOOD)
-            {
-                food = &map[i][j];
-                map[i][j].color = foodColor;
-            }
-            else if (ch == WALL)
+            if (ch == WALL)
             {
                 map[i][j].color = wallColor;
             }
@@ -343,7 +332,7 @@ inline void Puzzle::pushCellsChildren(Puzzle::Cell * current, priority_queue<Puz
                     child->priceWalkedBlocks = newPriceWalkedBlocks;
 
                     // Add the child to the priority queue.
-                    out << "Inserting child at (" << child->x << "," << child->y << ") with price: " << child->pricePotentialToFood + child->priceWalkedBlocks << "\n";
+                    //out << "Inserting child at (" << child->x << "," << child->y << ") with price: " << child->pricePotentialToFood + child->priceWalkedBlocks << "\n";
                     /* Make the color of the cell darker and display it*/
                     child->color *= 0.8;
                     fillVFBCell(child);
@@ -412,15 +401,14 @@ inline void Puzzle::solveAndVizualize(ostream& out)
 
     while (!front.empty())
     {
-        /*  Delay between every cell pop*/
-        Sleep(delay);
-
         // Let`s get the 'best' node
         current = front.top();
         front.pop();
-        out << "Looking cell at (" << current->x << "," << current->y << ") with price: " << current->pricePotentialToFood + current->priceWalkedBlocks << "\n";
+        //out << "Looking cell at (" << current->x << "," << current->y << ") with price: " << current->pricePotentialToFood + current->priceWalkedBlocks << "\n";
 
         /* Make the color of the cell darker and display it*/
+        /*  Delay between every cell pop*/
+        Sleep(delay);
         current->color *= 0.7;
         fillVFBCell(current);
         displayVFB(vfb);
@@ -428,7 +416,7 @@ inline void Puzzle::solveAndVizualize(ostream& out)
         // If we found the food, breaks.
         if (current == food)
         {
-            out << "Price to the food is: " << current->priceWalkedBlocks << "\n"; // Price to the food is zero...
+            out << "\n\nPrice to the food is: " << current->priceWalkedBlocks << "\n"; // Price to the food is zero...
             break;
         }
 

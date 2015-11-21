@@ -13,10 +13,10 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="G:/SDL/SDL-1.2.15/include" />
+					<Add directory="E:/SDL/SDL-1.2.15/include" />
 				</Compiler>
 				<Linker>
-					<Add directory="G:/SDL/SDL-1.2.15/lib" />
+					<Add directory="E:/SDL/SDL-1.2.15/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
