@@ -1,3 +1,22 @@
+/*
+*
+* Name: Anton Vasilev Dudov
+* # 71488
+*
+* Github repository: https://github.com/Anton94/Systems-based-on-knowledge/tree/master/Homework%20one%20with%20SDL
+*
+* A star path finding.
+* Command line arguments:
+* 1) file name for the map
+* 2) X coord for monster
+* 3) Y coord for monster
+* 4) X coord for food
+* 5) Y coord for food
+* And optional two:
+* 6) Flag for visualization of child pushing in the queue
+* 7) Delay in milliseconds for the frames
+*/
+
 #ifndef PUZZLE_H
 #define PUZZLE_H
 
@@ -58,6 +77,7 @@ private:
     int vfbCellWidth;  // The representation of cell in the SDL map
     int vfbCellHeight; // The representation of cell in the SDL map
     int delay; // Delay between child search
+    int calculateVisualizationFlag;
 
 public:
 	Puzzle();
@@ -100,6 +120,8 @@ public:
 	double getDiagonalCost() const { return diagonalCost; }
 	double getDirectCost() const { return directCost; }
 	double getWaterCost() const { return waterCost; }
+	int getVisualizationFlag() const { return calculateVisualizationFlag; }
+	int getDelay() const { return delay; }
 
 	/*
 		Setters for the map symbols.
@@ -113,6 +135,8 @@ public:
 	void setDiagonalCost(double cost) { diagonalCost = cost; }
 	void setDirectCost(double cost) { directCost = cost; }
 	void setWaterCost(double cost) { waterCost = cost; }
+	void setVisualizationFlag(int flag) { calculateVisualizationFlag = flag; }
+	void setDelay(int d) { delay = d; }
 private:
     // Sets the default values of the puzzle members.
 	void setDefaultValues();
@@ -151,7 +175,6 @@ inline Puzzle::Puzzle()
 // Sets the monster and the food cells. If the values are invalid- throws exeption.
 inline void Puzzle::setMonsterAndFoodCoords(int monsterX, int monsterY, int foodX, int foodY)
 {
-    std::cout << monsterX << " " << monsterY << " " << foodX << " " << foodY << std::endl;
     if (monsterX >= mapWidth || monsterY >= mapHeight || monsterX < 0 || monsterY < 0)
         throw "Invalid monster coordinates for the given map!";
     if (foodX >= mapWidth || foodY >= mapHeight || foodX < 0 || foodY < 0)
@@ -330,13 +353,16 @@ inline void Puzzle::pushCellsChildren(Puzzle::Cell * current, priority_queue<Puz
                     calculateCellDistanceToFood(child);
                     child->parent = current;
                     child->priceWalkedBlocks = newPriceWalkedBlocks;
+                    if (calculateVisualizationFlag)
+                    {
+                        //out << "Inserting child at (" << child->x << "," << child->y << ") with price: " << child->pricePotentialToFood + child->priceWalkedBlocks << "\n";
+                        /* Make the color of the cell darker and display it*/
+                        child->color *= 0.8;
+                        fillVFBCell(child);
+                        displayVFB(vfb);
+                    }
 
                     // Add the child to the priority queue.
-                    //out << "Inserting child at (" << child->x << "," << child->y << ") with price: " << child->pricePotentialToFood + child->priceWalkedBlocks << "\n";
-                    /* Make the color of the cell darker and display it*/
-                    child->color *= 0.8;
-                    fillVFBCell(child);
-                    displayVFB(vfb);
                     front.push(child);
                 }
             }
@@ -408,10 +434,13 @@ inline void Puzzle::solveAndVizualize(ostream& out)
 
         /* Make the color of the cell darker and display it*/
         /*  Delay between every cell pop*/
-        Sleep(delay);
-        current->color *= 0.7;
-        fillVFBCell(current);
-        displayVFB(vfb);
+        if (calculateVisualizationFlag)
+        {
+            Sleep(delay);
+            current->color *= 0.7;
+            fillVFBCell(current);
+            displayVFB(vfb);
+        }
 
         // If we found the food, breaks.
         if (current == food)
@@ -502,6 +531,7 @@ inline void Puzzle::setDefaultValues()
     monsterColor = Color(0xCF5B1E);
     foodColor = Color(0x9D5BA6);
     vfbCellWidth = vfbCellHeight = 0;
+    calculateVisualizationFlag = 1;
     delay = 0;
 }
 

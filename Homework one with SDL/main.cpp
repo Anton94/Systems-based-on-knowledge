@@ -1,3 +1,25 @@
+/*
+*
+*    Name: Anton Vasilev Dudov
+*    # 71488
+*
+*    Github repository: https://github.com/Anton94/Systems-based-on-knowledge/tree/master/Homework%20one%20with%20SDL
+*
+*    A star path finding.
+*
+*    Command line arguments:
+*       1) file name for the map
+*       2) X coord for monster
+*       3) Y coord for monster
+*       4) X coord for food
+*       5) Y coord for food
+*    And optional two:
+*       6) Flag for visualization of child pushing in the queue. By default it`s true
+*       7) Delay in milliseconds for the frames. By default it`s 0
+*/
+
+
+
 #include <iostream>
 #include <SDL/SDL.h>
 #include "sdl.h"
@@ -23,7 +45,7 @@ void renderScene2(void)
 }
 
 // Makes a unsigned number from given string
-int toIntCoord(char * str)
+int fromStringToInt(char * str)
 {
     int num = 0;
     while (*str != '\0')
@@ -45,9 +67,6 @@ int main(int argc, char** argv)
         return -1;
     }
 
-
-
-
 	if (!initGraphics(RESX, RESY)) return -1;
 	renderScene();
 	displayVFB(vfb);
@@ -58,9 +77,19 @@ int main(int argc, char** argv)
 		if (!puzzle.loadMap(argv[1]))
 			throw "Something is wrong with the map file!";
 
-        //std::cout <<toIntCoord(argv[2]) << " " << argv[3] << " " << argv[4] << " " << argv[5] << std::endl;
-        puzzle.setMonsterAndFoodCoords(toIntCoord(argv[2]), toIntCoord(argv[3]), toIntCoord(argv[4]), toIntCoord(argv[5]));
+        puzzle.setMonsterAndFoodCoords(fromStringToInt(argv[2]), fromStringToInt(argv[3]), fromStringToInt(argv[4]), fromStringToInt(argv[5]));
 
+        // The flag for the SDL visualization
+        if (argc >= 7)
+        {
+            puzzle.setVisualizationFlag(fromStringToInt(argv[6]));
+        }
+
+        // The flag for the SDL visualization
+        if (argc >= 8)
+        {
+            puzzle.setDelay(fromStringToInt(argv[7]));
+        }
 		puzzle.printMap(std::cout);
 		puzzle.solveAndVizualize(std::cout);
 		puzzle.visualizeThePath();
