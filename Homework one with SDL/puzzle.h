@@ -317,7 +317,7 @@ inline void Puzzle::printFormatedPath(ostream& out) const
 // Prints the path from the monster to his food.
 inline void Puzzle::printFormatedPath(Cell * cell, ostream& out) const
 {
-    if (!cell)
+    if (!cell->parent)
         return;
 
     printFormatedPath(cell->parent, out);
