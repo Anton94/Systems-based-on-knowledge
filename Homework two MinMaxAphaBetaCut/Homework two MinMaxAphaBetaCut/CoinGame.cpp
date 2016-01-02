@@ -5,11 +5,12 @@
 */
 CoinGame::Node::Node()
 {
-	coins = new char[size];
-	for (int i = 0; i < size; ++i)
+	coins = new char[CoinGame::Node::size];
+	for (int i = 0; i < CoinGame::Node::size; ++i)
 		coins[i] = 1;
+
 	bestChild = NULL;
-	coinsLeft = size;
+	coinsLeft = CoinGame::Node::size;
 }
 
 CoinGame::Node::Node(const Node& other)
@@ -64,6 +65,8 @@ CoinGame::CoinGame(size_t n)
 {
 	root = new Node();
 	CoinGame::Node::size = (int)n;
+	minusInf = std::numeric_limits<int>::min();
+	inf = std::numeric_limits<int>::max();
 }
 
 CoinGame::~CoinGame()
