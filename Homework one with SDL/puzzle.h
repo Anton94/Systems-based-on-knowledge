@@ -331,8 +331,8 @@ inline void Puzzle::pushCellsChildren(Puzzle::Cell * current, priority_queue<Puz
     Cell * child = NULL;
 
     // Lest check all neighbour cells. (NOTE: the case where @i and @j are zero, the current cell is visited, so nothing will happen.)
-    for (int i = -1; i <= 1; ++i)
-        for (int j = -1; j <= 1; ++j)
+    for (int j = -1; j <= 1; ++j)
+        for (int i = -1; i <= 1; ++i)
         {
             child = getCellAt(current->x + i, current->y + j);
             if (child) // If there is child there(valid cell at this position)
