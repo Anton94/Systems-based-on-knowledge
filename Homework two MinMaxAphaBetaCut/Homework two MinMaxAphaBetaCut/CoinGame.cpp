@@ -9,6 +9,7 @@ CoinGame::Node::Node()
 	for (int i = 0; i < size; ++i)
 		coins[i] = 1;
 	bestChild = NULL;
+	coinsLeft = size;
 }
 
 CoinGame::Node::Node(const Node& other)
@@ -39,6 +40,7 @@ void CoinGame::Node::copyFrom(const Node& other)
 	for (int i = 0; i < size; ++i)
 		coins[i] = other.coins[i];
 	bestChild = NULL;
+	coinsLeft = other.coinsLeft;
 }
 
 void CoinGame::Node::freeMemoryForCoinsAndChild() // Cascade destructor for all childs.
@@ -48,8 +50,9 @@ void CoinGame::Node::freeMemoryForCoinsAndChild() // Cascade destructor for all 
 }
 
 /*
- *
+*
 */
+
 
 // Initialization of the default number of coins (3)
 int CoinGame::Node::size = (int)3;
