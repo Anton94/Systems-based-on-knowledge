@@ -7,17 +7,17 @@ int main()
 	_CrtMemState s1, s2, s3;
 	_CrtMemCheckpoint(&s1);
 	{
-		for (int i = 1; i <= 10; ++i)
+		for (int i = 1; i <= 14; ++i)
 		{
 			CoinGame game(i);
 			game.generate(std::cout);
 		}
-		for (int i = 13; i <= 13; ++i)
+		/*for (int i = 13; i <= 13; ++i)
 		{
 			CoinGame game(i);
 			game.generate(std::cout, false);
 			game.printGameInfo(std::cout);
-		}
+		}*/
 	}
 
 	_CrtMemCheckpoint(&s2);

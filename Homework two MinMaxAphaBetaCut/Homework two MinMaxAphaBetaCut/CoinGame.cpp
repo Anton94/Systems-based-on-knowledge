@@ -1,5 +1,7 @@
 #include "CoinGame.h"
 
+#include <chrono> // Clock
+using namespace std::chrono; // Clock
 /*
  *	Node: constructors and destructor.
 */
@@ -78,17 +80,26 @@ void CoinGame::generate(std::ostream& out, bool printResult)
 		if (printResult)
 		{
 			out << "playCoinGame " << CoinGame::Node::size << " -> {"
-				<< 0 << " ,"
-				<< CoinGame::Node::size << " ,"
-				<< (CoinGame::Node::size - 1) << "}\n";
+				<< 0 << ", "
+				<< CoinGame::Node::size << ", "
+				<< (CoinGame::Node::size - 1) << "} 0 seconds and 0 miliseconds!\n";
 		}
 		return;
 	}
+	auto begin = high_resolution_clock::now();
 
 	int score = alphaBeta(root, 0, true, minusInf, inf);
 
+	auto end = high_resolution_clock::now();
+
+	auto ticks = duration_cast<milliseconds>(end - begin);
+
 	if (printResult)
+	{
 		printShortGameInfo(root, true, score, out);
+		out << " " << (ticks.count() / 1000) << " seconds and " << (ticks.count() % 1000) << " miliseconds!\n";
+		//out << ticks.count() << " miliseconds!\n";
+	}
 }
 
 // Prints step by step who player which coins has taken and such.
@@ -103,7 +114,7 @@ void CoinGame::printShortGameInfo(CoinGame::Node * n, bool maximizingTurn, int s
 	out << "playCoinGame " << CoinGame::Node::size << " -> {"
 		<< positionOfTaking(n, n->bestChild) << " ,"
 		<< takenCoinsDiff(n, n->bestChild) << " ,"
-		<< score << "}\n";
+		<< score << "}";
 }
 
 // Prints step by step who player which coins has taken and such.
