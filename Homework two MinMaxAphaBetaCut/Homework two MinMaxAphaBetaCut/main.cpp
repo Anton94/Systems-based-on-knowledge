@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "CoinGame.h"
 
 int main()
@@ -7,17 +8,19 @@ int main()
 	_CrtMemState s1, s2, s3;
 	_CrtMemCheckpoint(&s1);
 	{
-		for (int i = 1; i <= 14; ++i)
+		std::ofstream out("output.txt");
+		for (int i = 1; i <= 12; ++i)
 		{
 			CoinGame game(i);
-			game.generate(std::cout);
+			game.generate(out);
 		}
-		/*for (int i = 13; i <= 13; ++i)
+		for (int i = 1; i <= 12; ++i)
 		{
 			CoinGame game(i);
-			game.generate(std::cout, false);
-			game.printGameInfo(std::cout);
-		}*/
+			game.generate(out, false);
+			game.printGameInfo(out);
+		}
+		out.close();
 	}
 
 	_CrtMemCheckpoint(&s2);

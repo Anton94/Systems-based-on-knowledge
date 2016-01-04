@@ -1,0 +1,15 @@
+playCoinGame 1 -> {0, 1, 0} 0 seconds and 0 miliseconds!
+playCoinGame 2 -> {0, 2, 1} 0 seconds and 0 miliseconds!
+playCoinGame 3 -> {0, 3, 2} 0 seconds and 0 miliseconds!
+playCoinGame 4 -> {0, 3, -2} 0 seconds and 0 miliseconds!
+playCoinGame 5 -> {0, 1, -1} 0 seconds and 1 miliseconds!
+playCoinGame 6 -> {0, 2, -2} 0 seconds and 2 miliseconds!
+playCoinGame 7 -> {0, 1, -1} 0 seconds and 8 miliseconds!
+playCoinGame 8 -> {0, 2, -2} 0 seconds and 15 miliseconds!
+playCoinGame 9 -> {0, 1, -1} 0 seconds and 70 miliseconds!
+playCoinGame 10 -> {0, 2, -2} 0 seconds and 102 miliseconds!
+playCoinGame 11 -> {0, 1, -1} 1 seconds and 152 miliseconds!
+playCoinGame 12 -> {0, 2, -2} 2 seconds and 118 miliseconds!
+playCoinGame 13 -> {0, 3, -3} 6 seconds and 233 miliseconds!
+playCoinGame 14 -> {0, 3, -4} 9 seconds and 631 miliseconds!
+playCoinGame 15 -> {0, 1, -1} 208 seconds and 988 miliseconds!

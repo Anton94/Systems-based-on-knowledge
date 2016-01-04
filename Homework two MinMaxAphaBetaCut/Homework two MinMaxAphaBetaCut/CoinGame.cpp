@@ -15,12 +15,12 @@ CoinGame::Node::Node()
 	coinsLeft = CoinGame::Node::size;
 }
 
-CoinGame::Node::Node(const Node& other)
+CoinGame::Node::Node(const CoinGame::Node& other)
 {
 	copyFrom(other);
 }
 
-CoinGame::Node& CoinGame::Node::operator=(const Node& other)
+CoinGame::Node& CoinGame::Node::operator=(const CoinGame::Node& other)
 {
 	std::cout << "I don`t want to use this, but let`s we have it!" << std::endl;
 	if (this != &other)
@@ -37,7 +37,7 @@ CoinGame::Node::~Node()
 	freeMemoryForCoinsAndChild();
 }
 
-void CoinGame::Node::copyFrom(const Node& other)
+void CoinGame::Node::copyFrom(const CoinGame::Node& other)
 {
 	coins = other.coins;
 	bestChild = NULL;
@@ -63,7 +63,7 @@ int CoinGame::Node::size = (int)1000;
 CoinGame::CoinGame(size_t n)
 {
 	CoinGame::Node::size = (int)n;
-	root = new Node();
+	root = new CoinGame::Node();
 	minusInf = std::numeric_limits<int>::min();
 	inf = std::numeric_limits<int>::max();
 }
@@ -112,13 +112,13 @@ void CoinGame::printGameInfo(std::ostream& out) const
 void CoinGame::printShortGameInfo(CoinGame::Node * n, bool maximizingTurn, int score, std::ostream& out) const
 {
 	out << "playCoinGame " << CoinGame::Node::size << " -> {"
-		<< positionOfTaking(n, n->bestChild) << " ,"
-		<< takenCoinsDiff(n, n->bestChild) << " ,"
+		<< positionOfTaking(n, n->bestChild) << ", "
+		<< takenCoinsDiff(n, n->bestChild) << ", "
 		<< score << "}";
 }
 
 // Prints step by step who player which coins has taken and such.
-void CoinGame::printGameInfo(Node * n, bool maximizingTurn, std::ostream& out) const
+void CoinGame::printGameInfo(CoinGame::Node * n, bool maximizingTurn, std::ostream& out) const
 {
 	if (!n)
 		return;
@@ -176,7 +176,7 @@ int CoinGame::takenCoinsDiff(CoinGame::Node * parent, CoinGame::Node * child) co
 }
 
 // The current state(@n), number of moves (@moves), is MAX on turn (@maximizingTurn), maximum value (@alpha), minimum value (@beta)
-int CoinGame::alphaBeta(Node * n, int moves, bool maximizingTurn, int alpha, int beta)
+int CoinGame::alphaBeta(CoinGame::Node * n, int moves, bool maximizingTurn, int alpha, int beta)
 {
 	// If the game is over than the previous player took last coins, so he wins the points.
 	if (n->coinsLeft <= 0)
@@ -187,7 +187,7 @@ int CoinGame::alphaBeta(Node * n, int moves, bool maximizingTurn, int alpha, int
 
 	// Let`s generate all cases where the coins can be taken and make them as states(Nodes)
 	vector<CoinGame::Node *> child;
-	generateChild(n, child);
+	generateChildThreeTowOne(n, child);
 
 	int childNumber = child.size();
 	if (child.size() == 0)
@@ -256,9 +256,9 @@ int CoinGame::alphaBeta(Node * n, int moves, bool maximizingTurn, int alpha, int
 
 // Generate the child. 
 // Try to take coin from every position and try to take one if it has, try 2 and so .. try 3 coins (coins are taken from 'i-th' position and to the right of it)
-void CoinGame::generateChild(Node * node, vector<CoinGame::Node*>& child) const
+void CoinGame::generateChild(CoinGame::Node * node, vector<CoinGame::Node*>& child) const
 {
-	Node * tempChild = NULL;
+	CoinGame::Node * tempChild = NULL;
 	int iPlusOne = 0, iPlusTwo = 0;
 
 	for (int i = 0; i < CoinGame::Node::size; ++i)
@@ -266,7 +266,7 @@ void CoinGame::generateChild(Node * node, vector<CoinGame::Node*>& child) const
 		if (node->coins[i] != 0)
 		{
 			// Take one coin at i-th position
-			tempChild = new Node(*node);
+			tempChild = new CoinGame::Node(*node);
 			tempChild->coins[i] = (int)0;
 			tempChild->coinsLeft = tempChild->coinsLeft - 1;
 			child.push_back(tempChild);
@@ -275,7 +275,7 @@ void CoinGame::generateChild(Node * node, vector<CoinGame::Node*>& child) const
 			if (node->coins[iPlusOne])
 			{
 				// Take two coins starting from i-th position (to right)
-				tempChild = new Node(*tempChild); // Copies the child without coin at position 'i'
+				tempChild = new CoinGame::Node(*tempChild); // Copies the child without coin at position 'i'
 				tempChild->coins[iPlusOne] = (int)0;
 				tempChild->coinsLeft = tempChild->coinsLeft - 1;
 				child.push_back(tempChild);
@@ -283,12 +283,155 @@ void CoinGame::generateChild(Node * node, vector<CoinGame::Node*>& child) const
 				iPlusTwo = (i + 2) % CoinGame::Node::size;
 				if (node->coins[iPlusTwo])
 				{
-					tempChild = new Node(*tempChild); // Copies the child without coin at position 'i' and 'iPlusOne'
+					tempChild = new CoinGame::Node(*tempChild); // Copies the child without coin at position 'i' and 'iPlusOne'
 					tempChild->coins[iPlusTwo] = (int)0;
 					tempChild->coinsLeft = tempChild->coinsLeft - 1;
 					child.push_back(tempChild);
 				}
 			}
+		}
+	}
+}
+// Generate the child. 
+// Try to take coin from every position and try to take three if it has 3 side-by-side, try 2 or 1 (coins are taken from 'i-th' position and to the right of it)
+void CoinGame::generateChildBiGToSmall(CoinGame::Node * node, vector<CoinGame::Node*>& child) const
+{
+	CoinGame::Node * tempChild = NULL;
+	int iPlusOne = 0, iPlusTwo = 0;
+
+	for (int i = 0; i < CoinGame::Node::size; ++i)
+	{
+		iPlusOne = (i + 1) % CoinGame::Node::size;
+		iPlusTwo = (i + 2) % CoinGame::Node::size;
+
+		if (node->coins[i] != 0 && node->coins[iPlusOne] != 0 && node->coins[iPlusTwo] != 0)
+		{
+			// Take three coin from i-th position
+			tempChild = new CoinGame::Node(*node);
+			tempChild->coins[i] = (int)0;
+			tempChild->coins[iPlusOne] = (int)0;
+			tempChild->coins[iPlusTwo] = (int)0;
+			tempChild->coinsLeft = tempChild->coinsLeft - 3;
+			child.push_back(tempChild);
+		}
+		
+		if (node->coins[i] != 0 && node->coins[iPlusOne] != 0)
+		{
+			// Take two coin from i-th position
+			tempChild = new CoinGame::Node(*node);
+			tempChild->coins[i] = (int)0;
+			tempChild->coins[iPlusOne] = (int)0;
+			tempChild->coinsLeft = tempChild->coinsLeft - 2;
+			child.push_back(tempChild);
+		}
+
+		if (node->coins[i] != 0)
+		{
+			// Take one coin from i-th position
+			tempChild = new CoinGame::Node(*node);
+			tempChild->coins[i] = (int)0;
+			tempChild->coinsLeft = tempChild->coinsLeft - 1;
+			child.push_back(tempChild);
+		}
+	}
+}
+
+// Generate the child. 
+// Try to take coin from every position 3 coins, after that try 2 coins, and at the end one coin
+void CoinGame::generateChildThreeTowOne(CoinGame::Node * node, vector<CoinGame::Node*>& child) const
+{
+	CoinGame::Node * tempChild = NULL;
+	int iPlusOne = 0, iPlusTwo = 0;
+
+	for (int i = 0; i < CoinGame::Node::size; ++i)
+	{
+		iPlusOne = (i + 1) % CoinGame::Node::size;
+		iPlusTwo = (i + 2) % CoinGame::Node::size;
+
+		if (node->coins[i] != 0 && node->coins[iPlusOne] != 0 && node->coins[iPlusTwo] != 0)
+		{
+			// Take three coin from i-th position
+			tempChild = new CoinGame::Node(*node);
+			tempChild->coins[i] = (int)0;
+			tempChild->coins[iPlusOne] = (int)0;
+			tempChild->coins[iPlusTwo] = (int)0;
+			tempChild->coinsLeft = tempChild->coinsLeft - 3;
+			child.push_back(tempChild);
+		}
+	}
+	for (int i = 0; i < CoinGame::Node::size; ++i)
+	{
+		iPlusOne = (i + 1) % CoinGame::Node::size;
+		if (node->coins[i] != 0 && node->coins[iPlusOne] != 0)
+		{
+			// Take two coin from i-th position
+			tempChild = new CoinGame::Node(*node);
+			tempChild->coins[i] = (int)0;
+			tempChild->coins[iPlusOne] = (int)0;
+			tempChild->coinsLeft = tempChild->coinsLeft - 2;
+			child.push_back(tempChild);
+		}
+	}
+	for (int i = 0; i < CoinGame::Node::size; ++i)
+	{
+		if (node->coins[i] != 0)
+		{
+			// Take one coin from i-th position
+			tempChild = new CoinGame::Node(*node);
+			tempChild->coins[i] = (int)0;
+			tempChild->coinsLeft = tempChild->coinsLeft - 1;
+			child.push_back(tempChild);
+		}
+	}
+}
+
+// Generate the child. 
+// Try to take coin from every position 1 coin, after that try 2 coins, and at the end three coins
+void CoinGame::generateChildOneTwoThree(CoinGame::Node * node, vector<CoinGame::Node*>& child) const
+{
+	CoinGame::Node * tempChild = NULL;
+	int iPlusOne = 0, iPlusTwo = 0;
+
+	for (int i = 0; i < CoinGame::Node::size; ++i)
+	{
+		if (node->coins[i] != 0)
+		{
+			// Take one coin from i-th position
+			tempChild = new CoinGame::Node(*node);
+			tempChild->coins[i] = (int)0;
+			tempChild->coinsLeft = tempChild->coinsLeft - 1;
+			child.push_back(tempChild);
+		}
+	}
+
+	for (int i = 0; i < CoinGame::Node::size; ++i)
+	{
+		iPlusOne = (i + 1) % CoinGame::Node::size;
+		if (node->coins[i] != 0 && node->coins[iPlusOne] != 0)
+		{
+			// Take two coin from i-th position
+			tempChild = new CoinGame::Node(*node);
+			tempChild->coins[i] = (int)0;
+			tempChild->coins[iPlusOne] = (int)0;
+			tempChild->coinsLeft = tempChild->coinsLeft - 2;
+			child.push_back(tempChild);
+		}
+	}
+
+	for (int i = 0; i < CoinGame::Node::size; ++i)
+	{
+		iPlusOne = (i + 1) % CoinGame::Node::size;
+		iPlusTwo = (i + 2) % CoinGame::Node::size;
+
+		if (node->coins[i] != 0 && node->coins[iPlusOne] != 0 && node->coins[iPlusTwo] != 0)
+		{
+			// Take three coin from i-th position
+			tempChild = new CoinGame::Node(*node);
+			tempChild->coins[i] = (int)0;
+			tempChild->coins[iPlusOne] = (int)0;
+			tempChild->coins[iPlusTwo] = (int)0;
+			tempChild->coinsLeft = tempChild->coinsLeft - 3;
+			child.push_back(tempChild);
 		}
 	}
 }

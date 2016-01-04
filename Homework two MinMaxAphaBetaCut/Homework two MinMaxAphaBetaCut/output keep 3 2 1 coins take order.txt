@@ -1,0 +1,140 @@
+playCoinGame 1 -> {0, 1, 0} 0 seconds and 0 miliseconds!
+playCoinGame 2 -> {0, 2, 1} 0 seconds and 0 miliseconds!
+playCoinGame 3 -> {0, 3, 2} 0 seconds and 0 miliseconds!
+playCoinGame 4 -> {0, 3, -2} 0 seconds and 1 miliseconds!
+playCoinGame 5 -> {0, 1, -1} 0 seconds and 1 miliseconds!
+playCoinGame 6 -> {0, 2, -2} 0 seconds and 5 miliseconds!
+playCoinGame 7 -> {0, 1, -1} 0 seconds and 21 miliseconds!
+playCoinGame 8 -> {0, 2, -2} 0 seconds and 90 miliseconds!
+playCoinGame 9 -> {0, 1, -1} 0 seconds and 206 miliseconds!
+playCoinGame 10 -> {0, 2, -2} 0 seconds and 685 miliseconds!
+playCoinGame 11 -> {0, 1, -1} 4 seconds and 801 miliseconds!
+playCoinGame 12 -> {0, 2, -2} 20 seconds and 813 miliseconds!
+	Coins : [ 1]
+	Coins : [ 1 1]
+	Coins : [ 1 1 1]
+	Coins : [ 1 1 1 1]
+MAX turn taking 3 coins from position 0:
+	Coins : [ 0 0 0 1]
+MIN turn taking 1 coins from position 3:
+	Coins : [ 0 0 0 0]
+	Coins : [ 1 1 1 1 1]
+MAX turn taking 1 coins from position 0:
+	Coins : [ 0 1 1 1 1]
+MIN turn taking 2 coins from position 2:
+	Coins : [ 0 1 0 0 1]
+MAX turn taking 1 coins from position 1:
+	Coins : [ 0 0 0 0 1]
+MIN turn taking 1 coins from position 4:
+	Coins : [ 0 0 0 0 0]
+	Coins : [ 1 1 1 1 1 1]
+MAX turn taking 2 coins from position 0:
+	Coins : [ 0 0 1 1 1 1]
+MIN turn taking 2 coins from position 3:
+	Coins : [ 0 0 1 0 0 1]
+MAX turn taking 1 coins from position 2:
+	Coins : [ 0 0 0 0 0 1]
+MIN turn taking 1 coins from position 5:
+	Coins : [ 0 0 0 0 0 0]
+	Coins : [ 1 1 1 1 1 1 1]
+MAX turn taking 1 coins from position 0:
+	Coins : [ 0 1 1 1 1 1 1]
+MIN turn taking 2 coins from position 3:
+	Coins : [ 0 1 1 0 0 1 1]
+MAX turn taking 1 coins from position 1:
+	Coins : [ 0 0 1 0 0 1 1]
+MIN turn taking 1 coins from position 5:
+	Coins : [ 0 0 1 0 0 0 1]
+MAX turn taking 1 coins from position 2:
+	Coins : [ 0 0 0 0 0 0 1]
+MIN turn taking 1 coins from position 6:
+	Coins : [ 0 0 0 0 0 0 0]
+	Coins : [ 1 1 1 1 1 1 1 1]
+MAX turn taking 2 coins from position 0:
+	Coins : [ 0 0 1 1 1 1 1 1]
+MIN turn taking 2 coins from position 4:
+	Coins : [ 0 0 1 1 0 0 1 1]
+MAX turn taking 1 coins from position 2:
+	Coins : [ 0 0 0 1 0 0 1 1]
+MIN turn taking 1 coins from position 6:
+	Coins : [ 0 0 0 1 0 0 0 1]
+MAX turn taking 1 coins from position 3:
+	Coins : [ 0 0 0 0 0 0 0 1]
+MIN turn taking 1 coins from position 7:
+	Coins : [ 0 0 0 0 0 0 0 0]
+	Coins : [ 1 1 1 1 1 1 1 1 1]
+MAX turn taking 1 coins from position 0:
+	Coins : [ 0 1 1 1 1 1 1 1 1]
+MIN turn taking 2 coins from position 2:
+	Coins : [ 0 1 0 0 1 1 1 1 1]
+MAX turn taking 1 coins from position 6:
+	Coins : [ 0 1 0 0 1 1 0 1 1]
+MIN turn taking 1 coins from position 1:
+	Coins : [ 0 0 0 0 1 1 0 1 1]
+MAX turn taking 1 coins from position 4:
+	Coins : [ 0 0 0 0 0 1 0 1 1]
+MIN turn taking 1 coins from position 7:
+	Coins : [ 0 0 0 0 0 1 0 0 1]
+MAX turn taking 1 coins from position 5:
+	Coins : [ 0 0 0 0 0 0 0 0 1]
+MIN turn taking 1 coins from position 8:
+	Coins : [ 0 0 0 0 0 0 0 0 0]
+	Coins : [ 1 1 1 1 1 1 1 1 1 1]
+MAX turn taking 2 coins from position 0:
+	Coins : [ 0 0 1 1 1 1 1 1 1 1]
+MIN turn taking 2 coins from position 3:
+	Coins : [ 0 0 1 0 0 1 1 1 1 1]
+MAX turn taking 1 coins from position 7:
+	Coins : [ 0 0 1 0 0 1 1 0 1 1]
+MIN turn taking 1 coins from position 2:
+	Coins : [ 0 0 0 0 0 1 1 0 1 1]
+MAX turn taking 1 coins from position 5:
+	Coins : [ 0 0 0 0 0 0 1 0 1 1]
+MIN turn taking 1 coins from position 8:
+	Coins : [ 0 0 0 0 0 0 1 0 0 1]
+MAX turn taking 1 coins from position 6:
+	Coins : [ 0 0 0 0 0 0 0 0 0 1]
+MIN turn taking 1 coins from position 9:
+	Coins : [ 0 0 0 0 0 0 0 0 0 0]
+	Coins : [ 1 1 1 1 1 1 1 1 1 1 1]
+MAX turn taking 1 coins from position 0:
+	Coins : [ 0 1 1 1 1 1 1 1 1 1 1]
+MIN turn taking 2 coins from position 5:
+	Coins : [ 0 1 1 1 1 0 0 1 1 1 1]
+MAX turn taking 1 coins from position 1:
+	Coins : [ 0 0 1 1 1 0 0 1 1 1 1]
+MIN turn taking 1 coins from position 7:
+	Coins : [ 0 0 1 1 1 0 0 0 1 1 1]
+MAX turn taking 1 coins from position 2:
+	Coins : [ 0 0 0 1 1 0 0 0 1 1 1]
+MIN turn taking 1 coins from position 8:
+	Coins : [ 0 0 0 1 1 0 0 0 0 1 1]
+MAX turn taking 1 coins from position 3:
+	Coins : [ 0 0 0 0 1 0 0 0 0 1 1]
+MIN turn taking 1 coins from position 9:
+	Coins : [ 0 0 0 0 1 0 0 0 0 0 1]
+MAX turn taking 1 coins from position 4:
+	Coins : [ 0 0 0 0 0 0 0 0 0 0 1]
+MIN turn taking 1 coins from position 10:
+	Coins : [ 0 0 0 0 0 0 0 0 0 0 0]
+	Coins : [ 1 1 1 1 1 1 1 1 1 1 1 1]
+MAX turn taking 2 coins from position 0:
+	Coins : [ 0 0 1 1 1 1 1 1 1 1 1 1]
+MIN turn taking 2 coins from position 6:
+	Coins : [ 0 0 1 1 1 1 0 0 1 1 1 1]
+MAX turn taking 1 coins from position 2:
+	Coins : [ 0 0 0 1 1 1 0 0 1 1 1 1]
+MIN turn taking 1 coins from position 8:
+	Coins : [ 0 0 0 1 1 1 0 0 0 1 1 1]
+MAX turn taking 1 coins from position 3:
+	Coins : [ 0 0 0 0 1 1 0 0 0 1 1 1]
+MIN turn taking 1 coins from position 9:
+	Coins : [ 0 0 0 0 1 1 0 0 0 0 1 1]
+MAX turn taking 1 coins from position 4:
+	Coins : [ 0 0 0 0 0 1 0 0 0 0 1 1]
+MIN turn taking 1 coins from position 10:
+	Coins : [ 0 0 0 0 0 1 0 0 0 0 0 1]
+MAX turn taking 1 coins from position 5:
+	Coins : [ 0 0 0 0 0 0 0 0 0 0 0 1]
+MIN turn taking 1 coins from position 11:
+	Coins : [ 0 0 0 0 0 0 0 0 0 0 0 0]
