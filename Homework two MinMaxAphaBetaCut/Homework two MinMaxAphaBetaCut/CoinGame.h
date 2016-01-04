@@ -1,14 +1,27 @@
 #ifndef COINGAME__H_
 #define COINGAME__H_
 
+/*	Name: Anton Vasilev Dudov
+ *	FN:   71488
+ *
+ *	Homework two - coins game with alpha-beta cut
+ *
+ *	I used some different child generations and I found out that for the starting with cylce of N coins, the generation of childs which is 
+ *	taking three coins from every position, after that taking two coins from every positions and at the end one coin is the best, because it 
+ *	makes the tree of all states shorter.
+ *
+ *
+ *	Github repository: https://github.com/Anton94/Systems-based-on-knowledge/tree/master/Homework%20two%20MinMaxAphaBetaCut
+ *	
+ *
+ *	If you have any questions, you can ask me via mail: antonvdudov@gmail.com
+ */
+
 #include <iostream>
 #include <vector>
 #include <limits>
 
 using std::vector;
-
-/// TO DO: 
-//			- Add time
 
 class CoinGame
 {
@@ -34,6 +47,7 @@ class CoinGame
 	CoinGame::Node * root;
 	int minusInf;
 	int inf;
+	void (CoinGame::*childGeneration)(CoinGame::Node * node, vector<CoinGame::Node*>& child) const; // There are different ways to generate childs. I choose one of them and use it for my alpha-beta cuts.
 public:
 	CoinGame(size_t n);
 	~CoinGame();
@@ -61,8 +75,8 @@ private:
 	int alphaBeta(CoinGame::Node * n, int moves, bool maximizingTurn, int alpha, int beta);
 
 	// Generate the child. 
-	// Try to take coin from every position and try to take one if it has, try 2 and so .. try 3 coins (coins are taken from 'i-th' position and to the right of it)
-	void generateChild(CoinGame::Node * node, vector<CoinGame::Node*>& child) const;
+	// Try to take coin from every position and try to take one if it has, try 2 and try 3 coins (coins are taken from 'i-th' position and to the right of it)
+	void generateChildSmallToBig(CoinGame::Node * node, vector<CoinGame::Node*>& child) const;
 	
 	// Generate the child. 
 	// Try to take coin from every position and try to take three if it has 3 side-by-side, try 2 or 1 (coins are taken from 'i-th' position and to the right of it)

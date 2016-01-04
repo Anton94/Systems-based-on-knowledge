@@ -88,6 +88,9 @@ void CoinGame::generate(std::ostream& out, bool printResult)
 	}
 	auto begin = high_resolution_clock::now();
 
+
+	// Define which child generation I will use for alphaBeta function
+	childGeneration = &CoinGame::generateChildThreeTowOne;
 	int score = alphaBeta(root, 0, true, minusInf, inf);
 
 	auto end = high_resolution_clock::now();
@@ -187,7 +190,7 @@ int CoinGame::alphaBeta(CoinGame::Node * n, int moves, bool maximizingTurn, int 
 
 	// Let`s generate all cases where the coins can be taken and make them as states(Nodes)
 	vector<CoinGame::Node *> child;
-	generateChildThreeTowOne(n, child);
+	(this->*childGeneration)(n, child); 
 
 	int childNumber = child.size();
 	if (child.size() == 0)
@@ -256,7 +259,7 @@ int CoinGame::alphaBeta(CoinGame::Node * n, int moves, bool maximizingTurn, int 
 
 // Generate the child. 
 // Try to take coin from every position and try to take one if it has, try 2 and so .. try 3 coins (coins are taken from 'i-th' position and to the right of it)
-void CoinGame::generateChild(CoinGame::Node * node, vector<CoinGame::Node*>& child) const
+void CoinGame::generateChildSmallToBig(CoinGame::Node * node, vector<CoinGame::Node*>& child) const
 {
 	CoinGame::Node * tempChild = NULL;
 	int iPlusOne = 0, iPlusTwo = 0;
