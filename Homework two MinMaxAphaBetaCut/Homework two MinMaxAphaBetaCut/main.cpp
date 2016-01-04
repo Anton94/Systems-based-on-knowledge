@@ -5,9 +5,11 @@
 int main()
 {
 	// Checks for memory leaks. Works only in VS (for example) the memory check.
-	_CrtMemState s1, s2, s3;
-	_CrtMemCheckpoint(&s1);
-	{
+	//_CrtMemState s1, s2, s3;
+	//_CrtMemCheckpoint(&s1);
+	//{
+		//std::ofstream out("output.txt");		
+		
 		int n = 0;
 		std::cin >> n;
 		
@@ -18,10 +20,12 @@ int main()
 		}
 
 		CoinGame game(n);
+		std::cout << "...calculating...\n\n";
+
 		game.generate(std::cout);
+		std::cout << "\n";
 
 		/*
-		std::ofstream out("output.txt");
 		for (int i = 1; i <= 15; ++i)
 		{
 			CoinGame game(i);
@@ -33,7 +37,8 @@ int main()
 			game.generate(out, false);
 			game.printGameInfo(out);
 		}
-		out.close();*/
+		*/
+		//out.close();
 
 		//// Proper homework output design
 		//for (int i = 1; i <= 15; ++i)
@@ -41,13 +46,15 @@ int main()
 		//	CoinGame game(i);
 		//	game.generate(std::cout);
 		//}
-	}
 
-	_CrtMemCheckpoint(&s2);
-	if (_CrtMemDifference(&s3, &s1, &s2))
-	{
-		std::cout << "Memory leak detected!" << std::endl;
-		_CrtMemDumpStatistics(&s3);
-	}
+
+	//}
+
+	//_CrtMemCheckpoint(&s2);
+	//if (_CrtMemDifference(&s3, &s1, &s2))
+	//{
+	//	std::cout << "Memory leak detected!" << std::endl;
+	//	_CrtMemDumpStatistics(&s3);
+	//}
 	return 0;
 }
