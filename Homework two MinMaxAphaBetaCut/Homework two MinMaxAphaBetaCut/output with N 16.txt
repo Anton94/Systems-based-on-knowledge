@@ -1,0 +1,1 @@
+playCoinGame 16 -> {0, 2, -2} 389 seconds and 673 miliseconds!

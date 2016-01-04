@@ -1,0 +1,1 @@
+playCoinGame 18 -> {0, 3, -6} 3249 seconds and 795 miliseconds!
